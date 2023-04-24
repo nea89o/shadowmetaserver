@@ -39,9 +39,13 @@ if __name__ == '__main__':
     list_cmd = sub.add_parser('list', help="List all users")
     list_cmd.add_argument('--with-urls', '-u', help="Display client urls (which contain login information)",
                           action='store_const', const=True, default=False, dest="urls")
+    list_cmd.add_argument('--raw', '-r', help="Display raw (non base64-encoded) urls", action='store_const', const=True,
+                          default=False)
 
     get_url = sub.add_parser("get-url", help="Get a users url")
     get_url.add_argument('username', help="User name")
+    get_url.add_argument('--raw', '-r', help="Display raw (non base64-encoded) url", action='store_const', const=True,
+                          default=False)
     stop = sub.add_parser("stop", help="Stop the metaserver")
     start = sub.add_parser("start", help="Start the metaserver")
 
@@ -66,13 +70,13 @@ if __name__ == '__main__':
             print("No user found")
             sys.exit(1)
 
-        print(lib.create_url(user))
+        print(lib.create_url(user, encode=not args.raw))
 
     if args.command == 'list':
         for user in lib.get_all_users().values():
             print(end=f"{user.name} - {user.port}")
             if args.urls:
-                print(f' - {lib.create_url(user)}')
+                print(f' - {lib.create_url(user, encode=not args.raw)}')
             else:
                 print()
 

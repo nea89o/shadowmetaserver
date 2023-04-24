@@ -59,7 +59,7 @@ def create_url(user: User, server: str = myip, encode: bool = True) -> str:
     else:
         encoded_encryption = encryption
     return f'ss://{encoded_encryption}@{server}:{user.port}' + (
-        f'#{urllib.parse.quote(myname.replace("{user}", user.name), safe="")}' if encode and myname else "")
+        f'#{urllib.parse.quote(myname.replace("{user}", user.name), safe="")}' if server and myname else "")
 
 
 def create_args(user: User) -> list[str]:
